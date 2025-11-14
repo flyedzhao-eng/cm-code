@@ -1,7 +1,7 @@
 ﻿import { connect } from "cloudflare:sockets";
 let config_JSON, 反代IP = '', 启用SOCKS5反代 = null, 启用SOCKS5全局反代 = false, 我的SOCKS5账号 = '', parsedSocks5Address = {};
 let SOCKS5白名单 = ['*tapecontent.net', '*cloudatacdn.com', '*loadshare.org', '*cdn-centaurus.com', 'scholar.google.com'];
-const Pages静态页面 = 'https://edt-pages.github.io';
+const Pages静态页面 = 'https://hbx.flyedzhao.dpdns.org';
 ///////////////////////////////////////////////////////stallTCP参数///////////////////////////////////////////////
 const MAX_PENDING = 8 * 1024 * 1024,  // 最大缓冲大小（字节）：8MB，超过此值将触发背压控制，防止内存溢出
     KEEPALIVE = 15000,           // 心跳保活间隔（毫秒）：15秒，定期向服务器发送空包保持连接活跃
@@ -1825,3 +1825,4 @@ async function html1101(host, 访问IP) {
 </body>
 </html>`;
 }
+
