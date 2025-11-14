@@ -1,7 +1,7 @@
 ﻿import { connect } from "cloudflare:sockets";
 let config_JSON, 反代IP = '', 启用SOCKS5反代 = null, 启用SOCKS5全局反代 = false, 我的SOCKS5账号 = '', parsedSocks5Address = {};
 let SOCKS5白名单 = ['*tapecontent.net', '*cloudatacdn.com', '*loadshare.org', '*cdn-centaurus.com', 'scholar.google.com'];
-const Pages静态页面 = 'https://hbx.flyedzhao.dpdns.org';
+const Pages静态页面 = 'https://edt-pages.github.io';
 ///////////////////////////////////////////////////////stallTCP参数///////////////////////////////////////////////
 const MAX_PENDING = 8 * 1024 * 1024,  // 最大缓冲大小（字节）：8MB，超过此值将触发背压控制，防止内存溢出
     KEEPALIVE = 15000,           // 心跳保活间隔（毫秒）：15秒，定期向服务器发送空包保持连接活跃
@@ -448,30 +448,30 @@ function handleConnection(ws, request, FIXED_UUID) {
     async function 处理木马握手(data) {
         const bytes = new Uint8Array(data);
         if (bytes.byteLength < 56 || bytes[56] !== 0x0d || bytes[57] !== 0x0a) throw new Error("invalid data or header format");
-        if (new TextDecoder().decode(bytes.slice(0, 56)) !== sha224(FIXED_UUID)) throw new Error("invalid password");
+        if (new TextDecoder()。decode(bytes.slice(0, 56)) !== sha224(FIXED_UUID)) throw new Error("invalid password");
 
-        const socks5Data = bytes.slice(58);
+        const socks5Data = bytes。slice(58);
         if (socks5Data.byteLength < 6) throw new Error("invalid SOCKS5 request data");
         if (socks5Data[0] !== 1) throw new Error("unsupported command, only TCP (CONNECT) is allowed");
         const addressType = socks5Data[1]
         const { host, length } = parseAddress(socks5Data, 2, addressType);
-        if (!host) throw new Error(`address is empty, addressType is ${addressType}`);
-        if (host.includes(atob('c3BlZWQuY2xvdWRmbGFyZS5jb20='))) throw new Error('Access');
+        if (!host) throw new 错误(`address is empty, addressType is ${addressType}`);
+        if (host。includes(atob('c3BlZWQuY2xvdWRmbGFyZS5jb20='))) throw new 错误('Access');
 
         const port = (socks5Data[length] << 8) | socks5Data[length + 1];
-        const sock = await createConnection(host, port, addressType, 'T');
-        await sock.opened;
-        const w = sock.writable.getWriter();
+        const sock = await createConnection(host， port, addressType, 'T');
+        await sock。opened;
+        const w = sock。writable.getWriter();
         const payload = socks5Data.slice(length + 4);
-        if (payload.length) await w.write(payload);
-        return { socket: sock, writer: w, reader: sock.readable.getReader(), info: { host, port } };
+        if (payload。length) await w.write(payload);
+        return { socket: sock, writer: w， reader: sock.readable.getReader(), info: { host, port } };
     }
 
     async function createConnection(host, port, addressType, 协议类型) {
-        console.log(JSON.stringify({ configJSON: { 协议类型: 协议类型, 目标类型: addressType, 目标地址: host, 目标端口: port, 反代IP: 反代IP, 代理类型: 启用SOCKS5反代, 全局代理: 启用SOCKS5全局反代, 代理账号: 我的SOCKS5账号 } }));
+        console。log(JSON。stringify({ configJSON: { 协议类型: 协议类型, 目标类型: addressType, 目标地址: host, 目标端口: port, 反代IP: 反代IP, 代理类型: 启用SOCKS5反代, 全局代理: 启用SOCKS5全局反代, 代理账号: 我的SOCKS5账号 } }));
         async function useSocks5Pattern(address) {
             return SOCKS5白名单.some(pattern => {
-                let regexPattern = pattern.replace(/\*/g, '.*');
+                let regexPattern = pattern.替换(/\*/g， '.*');
                 let regex = new RegExp(`^${regexPattern}$`, 'i');
                 return regex.test(address);
             });
@@ -481,20 +481,20 @@ function handleConnection(ws, request, FIXED_UUID) {
         if (启用SOCKS5反代 == 'socks5' && 启用SOCKS5全局反代) {
             sock = await socks5Connect(host, port, addressType);
         } else if (启用SOCKS5反代 == 'http' && 启用SOCKS5全局反代) {
-            sock = await httpConnect(host, port);
+            sock = await httpConnect(host， port);
         } else {
             try {
                 sock = connect({ hostname: host, port });
-                await sock.opened;
+                await sock。opened;
             } catch {
                 if (启用SOCKS5反代 == 'socks5') {
-                    sock = await socks5Connect(host, port, addressType);
+                    sock = await socks5Connect(host， port, addressType);
                 } else if (启用SOCKS5反代 == 'http') {
                     sock = await httpConnect(host, port);
                 } else {
                     const [反代IP地址, 反代IP端口] = await 解析地址端口(反代IP);
                     try {
-                        sock = connect({ hostname: 反代IP地址, port: 反代IP端口 });
+                        sock = connect({ hostname: 反代IP地址， port: 反代IP端口 });
                     } catch {
                         sock = connect({ hostname: atob('UFJPWFlJUC50cDEuMDkwMjI3Lnh5eg=='), port: 1 });
                     }
@@ -507,15 +507,15 @@ function handleConnection(ws, request, FIXED_UUID) {
     async function readLoop() {
         if (isReading) return;
         isReading = true;
-        let batch = [], batchSize = 0, batchTimer = null;
+        let batch = []， batchSize = 0, batchTimer = null;
 
         // 批处理发送函数
         const flush = () => {
             if (!batchSize) return;
             const merged = new Uint8Array(batchSize);
             let pos = 0;
-            for (const chunk of batch) {
-                merged.set(chunk, pos);
+            for (const chunk / batch) {
+                merged.set(chunk， pos);
                 pos += chunk.length;
             }
             if (ws.readyState === 1) ws.send(merged);
@@ -1825,4 +1825,5 @@ async function html1101(host, 访问IP) {
 </body>
 </html>`;
 }
+
 
